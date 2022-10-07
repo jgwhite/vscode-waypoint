@@ -23,17 +23,37 @@ export function activate() {
             ),
           ];
         } else {
-          return [
-            authItem(),
-            buildArgsItem(),
-            buildkitItem(),
-            contextItem(),
-            disableEntrypointItem(),
-            dockerfileItem(),
-            noCacheItem(),
-            platformItem(),
-            targetItem(),
-          ];
+          const result = [];
+
+          if (!document.getText().includes("auth =")) {
+            result.push(authItem());
+          }
+          if (!document.getText().includes("build_args =")) {
+            result.push(buildArgsItem());
+          }
+          if (!document.getText().includes("buildkit =")) {
+            result.push(buildkitItem());
+          }
+          if (!document.getText().includes("context =")) {
+            result.push(contextItem());
+          }
+          if (!document.getText().includes("disable_entrypoint =")) {
+            result.push(disableEntrypointItem());
+          }
+          if (!document.getText().includes("dockerfile =")) {
+            result.push(dockerfileItem());
+          }
+          if (!document.getText().includes("no_cache =")) {
+            result.push(noCacheItem());
+          }
+          if (!document.getText().includes("platform =")) {
+            result.push(platformItem());
+          }
+          if (!document.getText().includes("target =")) {
+            result.push(targetItem());
+          }
+
+          return result;
         }
       },
     }
@@ -47,7 +67,7 @@ function authItem(): vscode.CompletionItem {
   );
   item.documentation =
     "The authentication information to log into the docker repository.";
-  item.insertText = new vscode.SnippetString("auth = {\n\t$0\n}");
+  item.insertText = new vscode.SnippetString("auth = {\n\t$1\n}");
   return item;
 }
 
@@ -58,7 +78,9 @@ function buildArgsItem() {
   );
   item.documentation =
     "Build args to pass to docker for the build step.\n\nAn array of strings of build-time variables passed as build-arg to docker for the build step.";
-  item.insertText = new vscode.SnippetString("build_args = {\n\t$0\n}");
+  item.insertText = new vscode.SnippetString(
+    'build_args = {\n\t"$1" = "$2"\n}'
+  );
   return item;
 }
 
@@ -68,7 +90,7 @@ function buildkitItem() {
     vscode.CompletionItemKind.Property
   );
   item.documentation = "If set, use the buildkit builder from Docker.";
-  item.insertText = "buildkit = true";
+  item.insertText = new vscode.SnippetString("buildkit = ${1|true,false|}");
   return item;
 }
 
@@ -78,7 +100,7 @@ function contextItem() {
     vscode.CompletionItemKind.Property
   );
   item.documentation = "Build context path.";
-  item.insertText = 'context = "."';
+  item.insertText = new vscode.SnippetString('context = "$1"');
   return item;
 }
 
@@ -89,7 +111,9 @@ function disableEntrypointItem() {
   );
   item.documentation =
     "If set, the entrypoint binary won't be injected into the image.\n\nThe entrypoint binary is what provides extended functionality such as logs and exec. If it is not injected at build time the expectation is that the image already contains it.";
-  item.insertText = "disable_entrypoint = true";
+  item.insertText = new vscode.SnippetString(
+    "disable_entrypoint = ${1|true,false|}"
+  );
   return item;
 }
 
@@ -100,7 +124,7 @@ function dockerfileItem() {
   );
   item.documentation =
     "The path to the Dockerfile.\n\nSet this when the Dockerfile is not APP-PATH/Dockerfile.";
-  item.insertText = new vscode.SnippetString('dockerfile = "$0"');
+  item.insertText = new vscode.SnippetString('dockerfile = "$1"');
   return item;
 }
 
@@ -111,7 +135,7 @@ function noCacheItem() {
   );
   item.documentation =
     "Do not use cache when building the image.\n\nEnsures a clean image build.";
-  item.insertText = "no_cache = false";
+  item.insertText = new vscode.SnippetString("no_cache = ${1|true,false|}");
   return item;
 }
 
@@ -122,7 +146,9 @@ function platformItem() {
   );
   item.documentation =
     "Set target platform to build container if server is multi-platform capable.\n\nMust enable Docker buildkit to use the 'platform' flag.";
-  item.insertText = new vscode.SnippetString('platform = "$0"');
+  item.insertText = new vscode.SnippetString(
+    'platform = "${1|linux/arm64,linux/amd64|}"'
+  );
   return item;
 }
 
@@ -133,6 +159,6 @@ function targetItem() {
   );
   item.documentation =
     "The target build stage in a multi-stage Dockerfile.\n\nIf buildkit is enabled unused stages will be skipped.";
-  item.insertText = new vscode.SnippetString('target = "$0"');
+  item.insertText = new vscode.SnippetString('target = "$1"');
   return item;
 }

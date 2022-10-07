@@ -4,10 +4,10 @@
     {
       "type": "extensionHost",
       "request": "launch",
-      "name": "Launch Client",
+      "name": "Launch extension",
       "runtimeExecutable": "${execPath}",
       "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
-      "outFiles": ["${workspaceRoot}/client/out/**/*.js"],
+      "outFiles": ["${workspaceRoot}/out/**/*.js"],
       "preLaunchTask": {
         "type": "npm",
         "script": "watch"

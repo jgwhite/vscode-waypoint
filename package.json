@@ -14,18 +14,22 @@
   "activationEvents": [
     "onLanguage:hcl"
   ],
-  "main": "./client/out/extension",
+  "main": "./out/extension",
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -b",
     "watch": "tsc -b -w",
-    "lint": "eslint ./client/src --ext .ts",
-    "postinstall": "cd client && npm install && cd .."
+    "lint": "eslint ./src --ext .ts"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^7.0.0"
   },
   "devDependencies": {
     "@types/node": "^16.11.7",
+    "@types/vscode": "^1.63.0",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
+    "@vscode/test-electron": "^2.1.2",
     "eslint": "^8.24.0",
     "typescript": "^4.8.4"
   }
